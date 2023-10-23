@@ -9,7 +9,7 @@
 #include <assert.h>
 
 void evaluationError(){
-    printf("Evaluation error\n");
+    printf("Evaluation error \n");
     texit(1);
 }
 
