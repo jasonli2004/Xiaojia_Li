@@ -1,0 +1,83 @@
+
+;;; This code is created by Lee and Duc for CS251 bst assignment
+;;; We write comments and fix indentations individually for convenience
+
+;;; This procedure returns the node, and return #f if bst does not contain three entries where the last one is a list
+(define entry
+  (lambda (bst)
+    (if (or (null? bst)
+	    (or (not (list? (car(cdr bst))))
+		(not (list? (car(cdr(cdr bst)))))))
+        #f
+        (car bst))))
+
+;;;returns the left subtree, returns #f in the same condition as the procedure above
+(define left
+  (lambda (bst)
+    (if (or (null? bst)
+	    (or (not (list? (car(cdr bst))))
+		(not (list? (car(cdr(cdr bst)))))))
+        #f
+        (car (cdr bst)))))
+
+;;;returns the right subtree, returns #f in the same condition as the procedure above  
+(define right
+  (lambda (bst)
+    (if (or (null? bst)
+	    (or (not (list? (car(cdr bst))))
+		(not (list? (car(cdr(cdr bst)))))))
+        #f
+        (car (cdr (cdr bst))))))
+
+;;;creates a bst with root elt, left subtree left-bst, right subtree right-bst, return #f if elt isn't a integer or input is bad.
+(define make-bst
+  (lambda (elt left-bst right-bst)
+    (if (not (and (integer? elt)
+		  (or (null? left-bst)
+		      (and (list? left-bst)
+			   (= (length left-bst) 3)
+			   (list? (car(cdr left-bst)))
+			   (list? (car(cdr(cdr left-bst))))))
+		  (or (null? right-bst)
+		      (and  (list? right-bst)
+			    (= (length right-bst) 3)
+			    (list? (car(cdr right-bst)))
+			    (list? (car(cdr(cdr right-bst))))))))
+        #f
+        (cons elt (cons left-bst (list right-bst))))))
+
+;;;returns a list of values obtained from preorder traversal of the bst
+(define preorder
+  (lambda (bst)
+    (if (null? bst)
+        '()
+	(append (list (entry bst))
+		(append (preorder (left bst))
+			(preorder (right bst)))))))
+
+;;;returns a list of values obtained from inorder traversal of the bst
+(define inorder
+  (lambda (bst)
+    (if (null? bst)
+        '()
+	(append (inorder (left bst))
+		(append (list (entry bst))
+			(inorder (right bst)))))))
+
+;;;returns a list of values obtained from postorder traversal of the bst
+(define postorder
+  (lambda (bst)
+    (if (null? bst)
+        '()
+        (append (postorder (left  bst))
+		(append (postorder (right bst))
+			(list (entry bst)))))))
+
+;;;returns a new bst with integer v inserted. if v is already in the bst, returns the original bst.
+(define insert
+  (lambda (v bst)
+    (cond
+     [(null? bst) (append (list v) '(() ()))]
+     [(< (entry bst) v) (make-bst (entry bst) (left bst) (insert v (right bst)))]
+     [(> (entry bst) v) (make-bst (entry bst) (insert v (left bst)) (right bst))]
+     [(equal? (entry bst) v) bst])))

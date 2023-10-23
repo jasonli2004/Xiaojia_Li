@@ -1,0 +1,14 @@
+;;;
+(define gen-list
+  (lambda (start stop)
+    (if (> start stop)
+	'()
+	(cons start (gen-list (+ start 1) stop)))))
+
+;;;
+(define pair-sum?
+  (lambda (lst target)
+    (if (< (length lst) 2)
+	#f
+	(or (equal? (+ (car lst) (car (cdr lst))) target)
+	    (pair-sum? (cdr lst) target)))))

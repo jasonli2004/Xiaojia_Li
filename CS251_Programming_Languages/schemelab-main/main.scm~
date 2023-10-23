@@ -1,0 +1,5 @@
+(define po
+  (lambda (x)
+    (if (equal? x 1)
+	1
+	(* x (po (- x 1))))))

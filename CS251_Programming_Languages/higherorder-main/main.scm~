@@ -1,0 +1,42 @@
+(define curry3
+  (lambda (f)
+    (lambda(a)
+      (lambda(b)
+        (lambda (c)
+          (f a b c))))))
+
+(define uncurry3
+ (lambda(cuf x y z)
+   (((cuf x) y) z)))
+
+(define uncurry-help
+  (lambda (args)
+    (if (equal? (length args) 2)
+        ((car args) (car (cdr args)))
+        (uncurry-help (cons ((car args) (car (cdr args))) (cdr (cdr args)))))))
+
+(define uncurry
+  (lambda args
+    (uncurry-help (cons ((car args) (car (cdr args))) (cdr (cdr args))))))
+
+(define my-filter
+  (lambda (f lst)
+    (cond ((null? lst) '())
+          ((f (car lst)) (cons (car lst) (my-filter f (cdr lst))))
+          (else (my-filter f (cdr lst))))))
+
+(define union
+  (lambda (lst1 lst2)
+    (if (null? lst1)
+        '()
+        (append lst1 (my-filter (lambda(x) (not (member x lst1))) lst2)))))
+
+(define intersect
+  (lambda (lst1 lst2)
+    (if (null? lst1)
+        '()
+        (my-filter (lambda(x) (not (equal? #f (member x lst1)))) lst2))))
+
+(define exists
+  (lambda (f lst)
+    (not (null? (my-filter f lst)))))

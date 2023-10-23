@@ -1,0 +1,6 @@
+
+(define nth
+  (lambda (lst n)
+    (cond ((null? lst) #f)
+	  ((equal? 0 n) (car lst))
+	  (else (nth (cdr lst) (- n 1))))))

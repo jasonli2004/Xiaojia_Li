@@ -1,0 +1,6 @@
+(define subset
+  (lambda (old new input)
+    (cond ((null? input)    '()   )
+	  ((list? input) (cons (subset old new (car input)) (subset old new (cdr input))))
+	  ((equal? input old) new)
+	  (else input))))
