@@ -1,0 +1,189 @@
+# encoding:utf-8
+
+'''
+some of these imports are packages that needs to be installed,
+just use pip command to install
+or search on google "install XXX on python (on RaspberryPi)"
+'''
+
+import requests
+
+from PIL import Image
+
+import base64
+
+import cv2
+
+import RPi.GPIO as GPIO
+
+from time import sleep
+
+import numpy as np
+
+import json
+
+import time
+
+
+GPIO.setwarnings(False) #standard buzzer code
+
+cap = cv2.VideoCapture(0) #if zero doesn't work, try replace zero with "-1","1" or "2", this port number may vary sometimes.
+'''
+sometimes the port number might change but you can try to make the number to be fixed(search on google)
+'''
+
+# client_id 为官网获取的AK， client_secret 为官网获取的SK
+'''
+this next part is about connecting to the server
+
+'''
+
+host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=dZ03rW1jCrngfkdfpwkbxOjU&client_secret=RQaxhtdU6GGbLALgPvESe20gQCRQSxSw'
+
+response = requests.get(host)
+
+access_token = (response.json()['access_token']);
+
+if response:
+
+    print(response.json())
+
+request_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/detection/quickhorse"
+'''
+do not change things above, they are defined
+'''
+
+i = 0
+
+while 1:
+
+       #capturing and displaying images
+
+    while (1):
+
+        ret, frame = cap.read()
+
+        # 获得图片
+
+        GPIO.setmode(GPIO.BCM) # Use physical pin numbering
+
+        GPIO.setup(16,GPIO.OUT)
+
+        GPIO.output(16,GPIO.HIGH)
+
+        GPIO.setup(19, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)      #button setup,  #19 is the corresponding pin number for RPI,change it if necessary
+
+        if GPIO.input(19) == GPIO.HIGH: #check whether the button is pressed, #19 is the corresponding pin number for RPI,change it if necessary
+
+            cv2.imwrite("camera.jpg", frame)
+
+            print("pressed")
+
+            image = cv2.imread("camera.jpg")
+
+            cv2.imshow("result",image)
+            if cv2.waitKey(1000) == 27:
+                i = i
+            break
+    start = time.time()
+    imagek = "camera.jpg"
+    with open(imagek, 'rb') as f:
+        base64_data = base64.b64encode(f.read())
+        s = base64_data.decode('UTF8')
+    params = {"image": s}
+    params = json.dumps(params)
+    request_url = request_url + "?access_token=" + access_token
+    headers = {'content-type': 'application/x-www-form-urlencoded'}
+    response = requests.post(request_url, data=params, headers=headers)
+    if (len(response.json()['results']) != 0):
+        width = response.json()['results'][0]["location"]['width']
+        top = response.json()['results'][0]["location"]['top']
+        left = response.json()['results'][0]["location"]['left']
+        height = response.json()['results'][0]["location"]['height']
+        img = cv2.imread(imagek)  #you can change "happy.jpg" to "rgb.jpg" to test red light or change back to "happy.jpg to test green light"
+        print(img.shape) # (1080, 1920, 3)
+        cropped = img[top : top + height , left : left + width ]  # 裁剪坐标为[y0:y1, x0:x1]
+        cv2.imwrite("cutout.jpg", cropped)
+        with open("cutout.jpg", 'rb') as f:
+            img = cv2.imread("cutout.jpg")
+            g = img[:, :, 1:2]
+            r = img[:, :, 2:]
+            g_mean = np.mean(g)
+
+            r_mean = np.mean(r)
+
+
+
+            if (g_mean > r_mean):
+
+                cnt = 0;
+
+                while cnt < 10:
+
+                    GPIO.setwarnings(False)
+
+                    GPIO.setmode(GPIO.BCM)
+
+                    buzzer=21
+
+                    GPIO.setup(buzzer,GPIO.OUT)
+
+                    GPIO.output(buzzer,GPIO.HIGH)
+
+                    print("Beep")
+
+                    sleep(0.4)
+
+                    GPIO.output(buzzer,GPIO.LOW)
+
+                    print("no beep")
+
+                    sleep(0.4)
+
+                    cnt=cnt+1
+
+                print("Green")
+
+                print(g_mean)
+
+            else:
+
+                print("Red")
+
+                print(r_mean)
+
+    else:
+
+        print("RED")
+
+        cnt = 0;
+
+        while cnt < 15:
+
+            GPIO.setwarnings(False)
+
+            GPIO.setmode(GPIO.BCM)
+
+            buzzer=21
+
+            GPIO.setup(buzzer,GPIO.OUT)
+
+            GPIO.output(buzzer,GPIO.HIGH)
+
+            print("Beep")
+
+            sleep(0.1)
+
+            GPIO.output(buzzer,GPIO.LOW)
+
+            print("no beep")
+
+            sleep(0.1)
+
+            cnt=cnt+1
+
+    end = time.time()
+
+    print("time",end - start)
+
+GPIO.setup(buzzer, GPIO.LOW)
