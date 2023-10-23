@@ -1,0 +1,66 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool isCousins(TreeNode* root, int x, int y) {
+        queue<pair<TreeNode*, int>> frontier;
+        int levelx = 0;
+        int levely = 0;
+        int parentx = 0;
+        int parenty = 0;
+        frontier.push({root, 0});
+        if (x == root->val || y== root->val){
+            return false;
+        }
+        while (!frontier.empty()){
+            TreeNode* node = frontier.front().first;
+            int value = frontier.front().second;
+            if ((levelx != 0 && value > levelx) || (levely!=0 && value > levely)){
+                return false;
+            }
+            if (node == nullptr){
+                frontier.pop();
+                continue;
+            }
+            frontier.push({node->left, value+1});
+            frontier.push({node->right, value+1});
+            if (node->left != nullptr){
+                if (node->left->val == x){
+                    levelx = value+1;
+                    parentx = node->val;
+                }
+                if (node->left->val == y){
+                    levely = value+1;
+                    parenty = node->val;
+                }
+            }
+            if (node->right != nullptr){
+                if (node->right->val == x){
+                    levelx = value+1;
+                    parentx = node->val;
+                }
+                if (node->right->val == y){
+                    levely = value+1;
+                    parenty = node->val;
+                }
+            }
+            frontier.pop();
+            if (parentx > 0 && parenty > 0){
+                if (levelx == levely && parentx != parenty){
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+};

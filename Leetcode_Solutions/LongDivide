@@ -1,0 +1,44 @@
+class Solution {
+    public int divide(int d1, int d2) {
+        long result = 0;
+        long dividend = (long) d1;
+        long divisor = (long) d2;
+        boolean positive = true;
+        if (dividend < 0 && divisor > 0){
+            dividend = (long) ((long)0 - dividend);
+            positive = false;
+        }
+        if (dividend > 0 && divisor < 0){
+            divisor = (long) ((long)0 - divisor);
+            positive = false;
+        }
+        if (dividend < 0 && divisor < 0){
+            divisor = (long) ((long)0 - divisor);
+            dividend = (long) ((long)0 - dividend);
+        }
+        result = ldivide(dividend, divisor);
+        if (positive){
+            if (cnt > Integer.MAX_VALUE){
+                return Integer.MAX_VALUE;
+            }
+            return (int) result;
+        }
+        if (cnt > Integer.MAX_VALUE){
+            return Integer.MIN_VALUE;
+        }
+        return (int) ((long)0 - result);
+    }
+    
+    private long ldivide(long dividend, long divisor){
+        if (dividend < divisor){
+            return (long) 0;
+        }
+        long sum = divisor;
+        long cnt = 1;
+        while ((sum+sum) <= dividend){
+            sum = sum + sum;
+            cnt = cnt + cnt;
+        }
+        return ldivide(dividend - sum, divisor) + cnt;
+    }
+}
