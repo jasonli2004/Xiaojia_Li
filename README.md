@@ -5,7 +5,7 @@ A collection of codes from my undergraduate(Carleton College) and high school st
 * **CS251 Programming Languages (Scheme, C)**
    - contains Scheme codes from assignments in CS251, winter 2022.
 * **CS257 Software Design (Python, HTML, CSS, SQL)**
-   - contains production codes and tests for a Chick-fil-A nutritional info website that is in the development process by three teammates in the class and I. Command to run the program: python3 app_gd3.py 
+   - contains production codes and tests for a Chick-fil-A nutritional info website that is in the development process by three teammates in the class and I. Command to run the program: python3 app.py 
 * **CS321 Making Decision With AI (Python, Prolog)**
    - contains Python and Prolog codes for the assignment of this class. Topics include searching algorithms, minimax, propositional logic, and reinforcement learning.
 * **Hackability Project (Python)**
