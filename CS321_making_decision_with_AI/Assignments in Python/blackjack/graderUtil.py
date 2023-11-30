@@ -12,6 +12,7 @@ Usage (see grader.py):
     grader.addBasicPart(number, grade_func, max_points, max_seconds, description="a basic test")
 
     # add a hidden test
+    
     grader.addHiddenPart(number, grade_func, max_points, max_seconds, description="a hidden test")
 
     # add a manual grading part
