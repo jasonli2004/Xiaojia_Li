@@ -13,7 +13,7 @@ A collection of codes from my undergraduate(Carleton College) and high school st
 * **Interactive Art Installation: The Living Funeral**
    -Hosts the code and photo for 'The Living Funeral', an interactive piece designed in Fall 2023 to invoke contemplation on life's impermanence. It features a Python-driven interface with user interactions, Arduino and Raspberry Pi for responsive elements, and integrates audiovisual feedback to craft an immersive experience.
 * **Leetcode Solutions (C++, Java)**
-  - contains solutions for LeetCode problems I completed in my freshman year.
+  - contains solutions for LeetCode problems I completed in my freshman and sophomore year.
   - File naming mostly follows the format: Problem_name_Problem_ID.
 * **Scheme_Interpreter_CS251 (C)**
   - a Scheme Interpreter in C built by Duc and me for CS251 Programming Languages in the winter of 2022.
