@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        unordered_map<int, int> indexMap;
+        int len = nums1.size();
+        for (int i = 0; i < len; i++){
+            indexMap[nums1[i]] = i;
+        }
+        vector<int> ans(len,-1);
+        stack<int> stk;
+        for (int i = 0; i < nums2.size(); i++){
+            while (!stk.empty()){
+                if (nums2[i] > nums2[stk.top()]){
+                    if (indexMap.find(nums2[stk.top()]) != indexMap.end()){
+                        ans[indexMap[nums2[stk.top()]]] = nums2[i]; 
+                    }         
+                    stk.pop();
+                }
+                else{
+                    break;
+                }
+            }
+            stk.push(i);
+        }
+        return ans;
+    }
+};
