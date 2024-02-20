@@ -1,5 +1,5 @@
 # Xiaojia_Li
-A collection of codes from my undergraduate(Carleton College) and high school studies and personal projects.
+A collection of codes from my undergraduate(Carleton College) and personal projects.
 * **CS201 Data structure (Java)**
    - contains Java codes from assignments in CS201(fall 2022), including the implementation of different sorting algorithms.
 * **CS251 Programming Languages (Scheme, C)**
